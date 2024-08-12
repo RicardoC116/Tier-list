@@ -137,6 +137,11 @@
             flex-wrap: wrap;
             align-content: flex-start;
             /* justify-content: center; */
+
+            &.drag-files {
+                background: rgb(255, 166, 0);
+                border-style: dashed;
+            }
         }
 
         .item-image {
@@ -178,10 +183,9 @@
             return imgElement
         }
 
-        imageInput.addEventListener('change', (event) => {
-            const {files} = event.target
+        function useFilesToCreateItems(files) {
 
-            if (files && files.length  > 0) {
+            if (files && files.length > 0) {
                 Array.from(files).forEach(file => {
                     const reader = new FileReader()
 
@@ -191,6 +195,11 @@
                     reader.readAsDataURL(file)
                 })
             }
+        }
+
+        imageInput.addEventListener('change', (event) => {
+            const { files } = event.target
+            useFilesToCreateItems(files)
         })
 
         let draggedElement = null
@@ -208,8 +217,35 @@
         itemsSection.addEventListener('dragover', handleDragOver)
         itemsSection.addEventListener('dragleave', handleDragLeave)
 
-        
+        itemsSection.addEventListener('drop', handleDropFromDesktop)
+        itemsSection.addEventListener('dragover', handleDragOverFromDesktop)
 
+
+        function handleDropFromDesktop(event) {
+            event.preventDefault()
+
+            const { dataTransfer, currentTarget } = event
+
+            if (dataTransfer.types.includes('Files')) {
+                currentTarget.classList.remove('drag-files')
+                const { files } = dataTransfer
+                useFilesToCreateItems(files)
+            }
+
+        }
+
+        function handleDragOverFromDesktop(event) {
+            event.preventDefault()
+
+            const { currentTarget, dataTransfer } = event
+
+            if (dataTransfer.types.includes('Files')) {
+                console.log('Hola, si funciona')
+                currentTarget.classList.add('drag-files')
+            }
+        }
+
+        // Drag funtions 
         function handleDrop(event) {
             event.preventDefault()
             const { currentTarget, dataTransfer } = event
@@ -228,6 +264,7 @@
             currentTarget.querySelector('.drag-preview')?.remove()
 
         }
+
         function handleDragOver(event) {
             event.preventDefault()
 
@@ -265,9 +302,10 @@
             sourceContainer = null
         }
 
+        // Reset button
         resetButton.addEventListener('click', () => {
             const items = $$('.tier .item-image')
-            items.forEach(item=>{
+            items.forEach(item => {
                 item.remove()
 
                 itemsSection.appendChild(item)
