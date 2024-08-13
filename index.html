@@ -46,6 +46,8 @@
             padding-block: 10px;
 
             & img {
+                margin-top: 40px;
+                margin-bottom: 30px;
                 width: 150px;
                 height: auto;
             }
@@ -148,6 +150,7 @@
 
             width: 50px;
             height: 50px;
+            margin-left: 5px;
             object-fit: cover;
             background: #fff;
             cursor: pointer;
@@ -220,32 +223,35 @@
         itemsSection.addEventListener('drop', handleDropFromDesktop)
         itemsSection.addEventListener('dragover', handleDragOverFromDesktop)
 
+        // Resolver el bug al soltar las imagenes del escritorio
 
-        function handleDropFromDesktop(event) {
-            event.preventDefault()
+        // function handleDropFromDesktop(event) {
+        //     event.preventDefault()
 
-            const { dataTransfer, currentTarget } = event
+        //     const { dataTransfer, currentTarget } = event
 
-            if (dataTransfer.types.includes('Files')) {
-                currentTarget.classList.remove('drag-files')
-                const { files } = dataTransfer
-                useFilesToCreateItems(files)
-            }
+        //     if (dataTransfer.types.includes('Files')) {
+        //         currentTarget.classList.remove('drag-files')
+        //         const { files } = dataTransfer
+        //         useFilesToCreateItems(files)
+        //     }
 
-        }
+        // }
 
-        function handleDragOverFromDesktop(event) {
-            event.preventDefault()
+        // function handleDragOverFromDesktop(event) {
+        //     event.preventDefault()
 
-            const { currentTarget, dataTransfer } = event
+        //     const { currentTarget, dataTransfer } = event
 
-            if (dataTransfer.types.includes('Files')) {
-                console.log('Hola, si funciona')
-                currentTarget.classList.add('drag-files')
-            }
-        }
+        //     if (dataTransfer.types.includes('Files')) {
+        //         console.log('Hola, si funciona')
+        //         currentTarget.classList.add('drag-files')
+        //     }
+        // }
 
         // Drag funtions 
+        
+        
         function handleDrop(event) {
             event.preventDefault()
             const { currentTarget, dataTransfer } = event
